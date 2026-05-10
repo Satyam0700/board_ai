@@ -4,11 +4,11 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Phase 2 — Editor Chrome (Navbar + Sidebar Shell) ✓
+- Phase 3 — Authentication ✓
 
 ## Current Goal
 
-- `02-editor` complete. Ready for next feature unit.
+- All auth work complete. Editor shell wired. Ready for next feature unit.
 
 ## Completed
 
@@ -16,6 +16,8 @@ Update this file whenever the current phase, active feature, or implementation s
 - Boilerplate cleaned — minimal page.tsx and globals.css.
 - `01-design-system` — shadcn/ui initialized (Radix + Nova preset), 7 components installed (Button, Card, Dialog, Input, Tabs, Textarea, ScrollArea), `cn()` utility created in `lib/utils.ts`, `lucide-react` installed, dark-only theme tokens configured in `globals.css`, `dark` class applied to `<html>`.
 - `02-editor` — `components/editor/editor-navbar.tsx` (fixed-height top navbar, sidebar toggle with PanelLeftOpen/PanelLeftClose icons) and `components/editor/project-sidebar.tsx` (floating overlay sidebar, My Projects + Shared tabs with empty states, New Project button). TypeScript compiles cleanly.
+- `03-auth` — Clerk Provider wired, proxy.ts created, auth routes protected, custom sign-in/sign-up pages created with dark theme and CSS variables. Auth UI redesigned to match reference design (logo, headline, icon feature list, copyright). Geist Sans font token fixed in globals.css.
+- `app/editor/page.tsx` created — wires EditorNavbar + ProjectSidebar with local sidebar state; resolves post-auth /editor 404.
 
 ## In Progress
 
@@ -23,7 +25,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Next Up
 
-- Define next feature unit.
+- Wait for next task.
 
 ## Open Questions
 
@@ -39,3 +41,4 @@ Update this file whenever the current phase, active feature, or implementation s
 ## Session Notes
 
 - Design system implementation verified: TypeScript compiles cleanly, production build passes, dark theme renders in browser.
+- Auth pages redesigned to match reference screenshot. Font token (--font-sans) was self-referencing and fixed to point to --font-geist-sans.
