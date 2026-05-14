@@ -4,11 +4,11 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Phase 3 — Authentication ✓
+- Phase 4 — Project Dialogs & Editor Home ✓
 
 ## Current Goal
 
-- All auth work complete. Editor shell wired. Ready for next feature unit.
+- Project dialogs complete. Editor home, Create/Rename/Delete dialogs, sidebar actions all wired with mock data. Ready for next feature unit.
 
 ## Completed
 
@@ -18,6 +18,7 @@ Update this file whenever the current phase, active feature, or implementation s
 - `02-editor` — `components/editor/editor-navbar.tsx` (fixed-height top navbar, sidebar toggle with PanelLeftOpen/PanelLeftClose icons) and `components/editor/project-sidebar.tsx` (floating overlay sidebar, My Projects + Shared tabs with empty states, New Project button). TypeScript compiles cleanly.
 - `03-auth` — Clerk Provider wired, proxy.ts created, auth routes protected, custom sign-in/sign-up pages created with dark theme and CSS variables. Auth UI redesigned to match reference design (logo, headline, icon feature list, copyright). Geist Sans font token fixed in globals.css.
 - `app/editor/page.tsx` created — wires EditorNavbar + ProjectSidebar with local sidebar state; resolves post-auth /editor 404.
+- `04-project-dialogs` — Editor home, Create/Rename/Delete dialogs, sidebar project items, and hook implementation.
 
 ## In Progress
 
