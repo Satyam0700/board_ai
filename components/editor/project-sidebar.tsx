@@ -3,7 +3,7 @@
 import { X, Plus, Pencil, Trash } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Project, DialogType } from "@/hooks/use-project-dialogs";
+import { Project, DialogType } from "@/hooks/use-project-actions";
 
 interface ProjectSidebarProps {
   isOpen: boolean;

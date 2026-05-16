@@ -4,11 +4,11 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Phase 5 — Prisma Schema & Data Layer ✓
+- Phase 7 — Wire Editor Home
 
 ## Current Goal
 
-- Prisma data layer complete. Project and ProjectCollaborator models defined, migration applied, client singleton created with Accelerate/direct-pg branching. Ready for next feature unit.
+- Wire the editor home sidebar and dialogs to the real project API.
 
 ## Completed
 
@@ -20,6 +20,8 @@ Update this file whenever the current phase, active feature, or implementation s
 - `app/editor/page.tsx` created — wires EditorNavbar + ProjectSidebar with local sidebar state; resolves post-auth /editor 404.
 - `04-project-dialogs` — Editor home, Create/Rename/Delete dialogs, sidebar project items, and hook implementation.
 - `05-prisma` — `prisma/models/project.prisma` with Project (ownerId, name, description, status enum, canvasJsonPath, timestamps, indexes) and ProjectCollaborator (cascade delete, email, unique constraint, indexes). `lib/prisma.ts` singleton with Accelerate/direct-pg branching based on DATABASE_URL prefix. `@prisma/extension-accelerate` installed. Migration `20260515095901_init_projects` applied. `npm run build` passes.
+- `06-project-apis` — Built `app/api/projects/route.ts` and `app/api/projects/[projectId]/route.ts`. Endpoints implemented for list, create, rename, and delete. Clerk auth enforced (401) and owner checks enforced for rename/delete (403). `id` follows Prisma cuid defaults. Fixed Next.js 16 dynamic route Promise `params` resolution. Resolved Prisma union type issue in `lib/prisma.ts`. `npm run build` passes.
+- `07-wire-editor-home` - Wired the editor home sidebar and dialogs to the real project API. Created `useProjectActions` hook. Refactored `app/editor/page.tsx` into a server component fetching real Prisma data and `EditorClient` client component. Added room ID preview. `npm run build` passes.
 
 ## In Progress
 
@@ -47,3 +49,4 @@ Update this file whenever the current phase, active feature, or implementation s
 - Design system implementation verified: TypeScript compiles cleanly, production build passes, dark theme renders in browser.
 - Auth pages redesigned to match reference screenshot. Font token (--font-sans) was self-referencing and fixed to point to --font-geist-sans.
 - Prisma migration applied to remote Prisma Postgres instance. Build verified with zero TS errors.
+- Added Project API routes and fixed Prisma client type union issue (`This expression is not callable`) by returning `$extends(withAccelerate())` on all branches in `lib/prisma.ts`. Evaluated `params` as a Promise in Next.js 16 app router dynamic routes.
