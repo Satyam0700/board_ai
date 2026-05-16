@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { X, Plus, Pencil, Trash } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -11,18 +12,26 @@ interface ProjectSidebarProps {
   onOpenDialog: (type: DialogType, project?: Project) => void;
   myProjects: Project[];
   sharedProjects: Project[];
+  activeProjectId?: string;
 }
 
-function ProjectItem({ project, onOpenDialog }: { project: Project; onOpenDialog: (type: DialogType, project?: Project) => void }) {
+function ProjectItem({ project, onOpenDialog, isActive }: { project: Project; onOpenDialog: (type: DialogType, project?: Project) => void; isActive?: boolean; }) {
   return (
-    <div className="group flex items-center justify-between rounded-md px-2 py-2 text-sm text-copy-secondary hover:bg-elevated hover:text-copy-primary transition-colors cursor-pointer">
+    <Link
+      href={`/editor/${project.id}`}
+      className={`group flex items-center justify-between rounded-md px-2 py-2 text-sm transition-colors cursor-pointer ${
+        isActive
+          ? "bg-brand/10 text-brand font-medium"
+          : "text-copy-secondary hover:bg-elevated hover:text-copy-primary"
+      }`}
+    >
       <span className="truncate">{project.name}</span>
       {project.isOwner && (
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             type="button"
             className="p-1 rounded hover:bg-subtle text-copy-muted hover:text-copy-primary transition-colors focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-            onClick={(e) => { e.stopPropagation(); onOpenDialog("rename", project); }}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onOpenDialog("rename", project); }}
             aria-label="Rename project"
           >
             <Pencil className="h-3.5 w-3.5" />
@@ -30,18 +39,18 @@ function ProjectItem({ project, onOpenDialog }: { project: Project; onOpenDialog
           <button
             type="button"
             className="p-1 rounded hover:bg-subtle text-copy-muted hover:text-destructive transition-colors focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive"
-            onClick={(e) => { e.stopPropagation(); onOpenDialog("delete", project); }}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onOpenDialog("delete", project); }}
             aria-label="Delete project"
           >
             <Trash className="h-3.5 w-3.5" />
           </button>
         </div>
       )}
-    </div>
+    </Link>
   );
 }
 
-export function ProjectSidebar({ isOpen, onClose, onOpenDialog, myProjects, sharedProjects }: ProjectSidebarProps) {
+export function ProjectSidebar({ isOpen, onClose, onOpenDialog, myProjects, sharedProjects, activeProjectId }: ProjectSidebarProps) {
   return (
     <>
       {/* Backdrop for mobile */}
@@ -97,7 +106,7 @@ export function ProjectSidebar({ isOpen, onClose, onOpenDialog, myProjects, shar
               {myProjects.length > 0 ? (
                 <div className="flex flex-col gap-1 py-2">
                   {myProjects.map((project) => (
-                    <ProjectItem key={project.id} project={project} onOpenDialog={onOpenDialog} />
+                    <ProjectItem key={project.id} project={project} onOpenDialog={onOpenDialog} isActive={project.id === activeProjectId} />
                   ))}
                 </div>
               ) : (
@@ -114,7 +123,7 @@ export function ProjectSidebar({ isOpen, onClose, onOpenDialog, myProjects, shar
               {sharedProjects.length > 0 ? (
                 <div className="flex flex-col gap-1 py-2">
                   {sharedProjects.map((project) => (
-                    <ProjectItem key={project.id} project={project} onOpenDialog={onOpenDialog} />
+                    <ProjectItem key={project.id} project={project} onOpenDialog={onOpenDialog} isActive={project.id === activeProjectId} />
                   ))}
                 </div>
               ) : (
