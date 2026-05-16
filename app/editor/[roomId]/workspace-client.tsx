@@ -8,6 +8,7 @@ import { ProjectSidebar } from "@/components/editor/project-sidebar";
 import { useProjectActions } from "@/hooks/use-project-actions";
 import { ProjectDialogs } from "@/components/editor/project-dialogs";
 import { ShareDialog } from "@/components/editor/share-dialog";
+import { CanvasWrapper } from "@/components/editor/canvas-wrapper";
 
 interface Project {
   id: string;
@@ -112,14 +113,8 @@ export function WorkspaceClient({ myProjects, sharedProjects, activeProject }: W
       />
 
       <div className="flex flex-1 pt-12">
-        {/* Canvas placeholder */}
-        <main className="flex-1 flex flex-col items-center justify-center bg-[#0a0a0a]">
-          <h2 className="text-lg font-medium text-copy-primary">
-            Canvas area
-          </h2>
-          <p className="text-sm text-copy-faint mt-1">
-            Drawing features coming soon...
-          </p>
+        <main className="flex-1 flex flex-col bg-[#0a0a0a]">
+          <CanvasWrapper roomId={activeProject.id} />
         </main>
 
         {/* AI Sidebar placeholder */}
