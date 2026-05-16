@@ -33,7 +33,7 @@ function buildClient() {
 
   // Direct PostgreSQL via @prisma/adapter-pg
   const adapter = new PrismaPg({ connectionString: url });
-  return new PrismaClient({ adapter });
+  return new PrismaClient({ adapter }).$extends(withAccelerate());
 }
 
 export const prisma = globalForPrisma.prisma ?? buildClient();

@@ -1,77 +1,60 @@
-"use client";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { EditorClient } from "./editor-client";
 
-import { useState } from "react";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { EditorNavbar } from "@/components/editor/editor-navbar";
-import { ProjectSidebar } from "@/components/editor/project-sidebar";
-import { useProjectDialogs } from "@/hooks/use-project-dialogs";
-import { ProjectDialogs } from "@/components/editor/project-dialogs";
+export default async function EditorPage() {
+  const { userId } = await auth();
+  const user = await currentUser();
 
-export default function EditorPage() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const {
-    activeDialog,
-    selectedProject,
-    openDialog,
-    closeDialog,
-    createName,
-    setCreateName,
-    renameName,
-    setRenameName,
-    isLoading,
-    myProjects,
-    sharedProjects,
-    handleCreate,
-    handleRename,
-    handleDelete,
-  } = useProjectDialogs();
+  if (!userId || !user) {
+    redirect("/sign-in");
+  }
+
+  // Fetch owned projects
+  const ownedDbProjects = await prisma.project.findMany({
+    where: { ownerId: userId },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, name: true, ownerId: true },
+  });
+
+  const myProjects = ownedDbProjects.map((p) => ({
+    id: p.id,
+    name: p.name,
+    isOwner: true,
+  }));
+
+  // Fetch shared projects
+  const primaryEmail = user.emailAddresses.find(
+    (e) => e.id === user.primaryEmailAddressId
+  )?.emailAddress;
+
+  let sharedProjects: { id: string; name: string; isOwner: boolean }[] = [];
+
+  if (primaryEmail) {
+    const sharedDbProjects = await prisma.project.findMany({
+      where: {
+        collaborators: {
+          some: {
+            email: primaryEmail,
+          },
+        },
+      },
+      select: { id: true, name: true },
+      orderBy: { createdAt: "desc" },
+    });
+
+    sharedProjects = sharedDbProjects.map((p) => ({
+      id: p.id,
+      name: p.name,
+      isOwner: false,
+    }));
+  }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-base">
-      <EditorNavbar
-        isSidebarOpen={sidebarOpen}
-        onSidebarToggle={() => setSidebarOpen((v) => !v)}
-      />
-
-      <ProjectSidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        onOpenDialog={openDialog}
-        myProjects={myProjects}
-        sharedProjects={sharedProjects}
-      />
-
-      <ProjectDialogs
-        activeDialog={activeDialog}
-        selectedProject={selectedProject}
-        onClose={closeDialog}
-        createName={createName}
-        setCreateName={setCreateName}
-        renameName={renameName}
-        setRenameName={setRenameName}
-        isLoading={isLoading}
-        handleCreate={handleCreate}
-        handleRename={handleRename}
-        handleDelete={handleDelete}
-      />
-
-      {/* Canvas placeholder — replaced when canvas feature is built */}
-      <main className="flex flex-1 flex-col items-center justify-center pt-12">
-        <h1 className="text-xl font-semibold text-copy-primary text-center px-4">
-          Create a project or open an existing one
-        </h1>
-        <p className="mt-2 text-sm text-copy-secondary text-center px-4">
-          Start a new architecture workspace, or choose a project from the sidebar.
-        </p>
-        <Button
-          className="mt-6 gap-2"
-          onClick={() => openDialog("create")}
-        >
-          <Plus className="h-4 w-4" />
-          New Project
-        </Button>
-      </main>
-    </div>
+    <EditorClient 
+      myProjects={myProjects} 
+      sharedProjects={sharedProjects} 
+    />
   );
 }

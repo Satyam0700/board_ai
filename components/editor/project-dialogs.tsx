@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Project, DialogType, toSlug } from "@/hooks/use-project-dialogs";
+import { Project, DialogType, toSlug } from "@/hooks/use-project-actions";
 
 interface ProjectDialogsProps {
   activeDialog: DialogType;
@@ -13,6 +13,7 @@ interface ProjectDialogsProps {
   setCreateName: (name: string) => void;
   renameName: string;
   setRenameName: (name: string) => void;
+  shortId?: string;
   isLoading: boolean;
   handleCreate: () => void;
   handleRename: () => void;
@@ -27,6 +28,7 @@ export function ProjectDialogs({
   setCreateName,
   renameName,
   setRenameName,
+  shortId,
   isLoading,
   handleCreate,
   handleRename,
@@ -34,6 +36,7 @@ export function ProjectDialogs({
 }: ProjectDialogsProps) {
   const createSlug = toSlug(createName);
   const isSlugValid = createName.trim().length > 0 && createSlug.length > 0;
+  const fullSlug = createSlug && shortId ? `${createSlug}-${shortId}` : createSlug;
 
   return (
     <>
@@ -59,7 +62,7 @@ export function ProjectDialogs({
             {createName && (
               <p className={`mt-2 text-xs ${createSlug ? "text-copy-muted" : "text-destructive"}`}>
                 {createSlug
-                  ? `Slug preview: /${createSlug}`
+                  ? `Room ID preview: /${fullSlug}`
                   : "Name must contain at least one letter or number."}
               </p>
             )}
