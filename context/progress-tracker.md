@@ -4,11 +4,13 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Phase 9 — Share Dialog
+## Current Phase
+
+- Phase 12 — Shape Panel
 
 ## Current Goal
 
-- Completed sharing functionality in the workspace so project owners can invite collaborators by email.
+- Add a bottom shape panel so users can drag shapes onto the canvas and create new nodes.
 
 ## Completed
 
@@ -24,10 +26,14 @@ Update this file whenever the current phase, active feature, or implementation s
 - `07-wire-editor-home` - Wired the editor home sidebar and dialogs to the real project API. Created `useProjectActions` hook. Refactored `app/editor/page.tsx` into a server component fetching real Prisma data and `EditorClient` client component. Added room ID preview. `npm run build` passes.
 - `08-editor-workspace-shell` - Created `lib/project-access.ts` with Clerk identity and Prisma access checks. Built `/editor/[roomId]` server component with ownership/collaboration checks. Implemented `WorkspaceClient` layout (navbar with project name, left sidebar, canvas placeholder, right AI sidebar placeholder). Created `AccessDenied` fallback.
 - `09-share-dialog` - Created `ShareDialog` component, allowing owners to invite/remove collaborators by email and all users to copy the project link. Built API routes for listing, inviting, and removing collaborators with server-side ownership enforcement. Displayed Clerk user names and avatars for collaborators when available.
+- `10-liveblocks-setup` - Configured `liveblocks.config.ts` with Presence (cursor, isThinking) and UserMeta (name, avatar, cursorColor) types. Created `lib/liveblocks.ts` with a lazily-initialized cached Liveblocks node client and deterministic cursor color helper. Built `POST /api/liveblocks-auth` route that verifies Clerk auth, checks project access via `checkProjectAccess`, ensures the Liveblocks room exists with `getOrCreateRoom`, and returns a session token with user metadata. Installed `@liveblocks/node`. `npm run build` passes.
+- `11-base-canvas` - Set up React Flow with `@liveblocks/react-flow`. Added `CanvasWrapper` with Liveblocks room providers, suspense, and error boundaries. Created `Canvas` component with synced nodes and edges using `useLiveblocksFlow`. Added `types/canvas.ts` for node and edge types. `npm run build` passes.
+
+- `12-shape-panel` - Implemented floating shape panel with drag-and-drop support. Created custom `CanvasNodeComponent` renderer for multiple shapes (rectangle, circle, diamond, pill, cylinder, hexagon). Integrated with React Flow and Liveblocks for collaborative shape creation. `npm run build` passes.
 
 ## In Progress
 
-- None.
+- Wait for next task.
 
 ## Next Up
 
