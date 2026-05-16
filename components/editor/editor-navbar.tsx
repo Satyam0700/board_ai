@@ -6,11 +6,15 @@ import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 interface EditorNavbarProps {
   isSidebarOpen: boolean;
   onSidebarToggle: () => void;
+  projectName?: string;
+  rightActions?: React.ReactNode;
 }
 
 export function EditorNavbar({
   isSidebarOpen,
   onSidebarToggle,
+  projectName,
+  rightActions,
 }: EditorNavbarProps) {
   return (
     <header className="fixed top-0 inset-x-0 z-50 flex h-12 items-center bg-surface border-b border-surface-border px-3">
@@ -31,10 +35,17 @@ export function EditorNavbar({
       </div>
 
       {/* Center section */}
-      <div className="flex items-center" />
+      <div className="flex flex-1 items-center justify-center">
+        {projectName && (
+          <span className="text-sm font-medium text-copy-primary truncate max-w-[200px]">
+            {projectName}
+          </span>
+        )}
+      </div>
 
       {/* Right section — profile settings and logout */}
-      <div className="flex flex-1 items-center justify-end px-2">
+      <div className="flex flex-1 items-center justify-end gap-2 px-2">
+        {rightActions}
         <UserButton 
           appearance={{
             elements: {
